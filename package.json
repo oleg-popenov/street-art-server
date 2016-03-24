@@ -1,0 +1,26 @@
+{
+  "name": "street-art-server",
+  "version": "1.0.0",
+  "description": "Opensource Node.js backend for StreetArtView project",
+  "main": "server.js",
+  "dependencies": {
+    "express": "4.13.x",
+    "ejs": "2.2.x",
+    "mongoose": "4.4.x"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oleg-popenov/street-art-server.git"
+  },
+  "author": "oleg-popenov",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/oleg-popenov/street-art-server/issues"
+  },
+  "homepage": "https://github.com/oleg-popenov/street-art-server#readme"
+}
