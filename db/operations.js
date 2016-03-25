@@ -14,29 +14,32 @@ var getArtworks = function (res) {
 }
 
 var addArtwork = function (req, res){
+    if(!req.body) throw new Error("Empty form")
+    var form = req.body
     var artwork = new Artwork ({
-    url: "http://tophdimgs.com/data_images/wallpapers/3/335494-artwork.jpg",                                    
-    name: "Artwork name",                                   
-    description: "Some description",                            
+    url: form.url,
+    name: form.name,                                   
+    description: form.description,
     location:{ 	                                    
-        lat: 20,                                
-        lng: 20,                                
-        address: "NN"
+        lat: form.location_lat,                                
+        lng: form.location_lng,                                
+        address: form.location_address
     },
     status: {                                       
-        code: 1,
-        name: "Status name" 
+        code: form.status_code,
+        name: form.status_name 
     },                                 
     artists: [{
-        name: "Vasya Pupkin",
-        photo: "http://tophdimgs.com/data_images/wallpapers/3/335494-artwork.jpg"
+        name: form.artist_name,
+        photo: form.artist_photo
     }],                              
     photos:	[{
-        title: "Super photo",
-        thumbnail: "http://tophdimgs.com/data_images/wallpapers/3/335494-artwork.jpg",
-        fullres: "http://tophdimgs.com/data_images/wallpapers/3/335494-artwork.jpg",  
-        blurred: "http://tophdimgs.com/data_images/wallpapers/3/335494-artwork.jpg"
-    }]
+        title: form.photo_title,
+        thumbnail: form.photo_thumbnail,
+        fullres: form.photo_fullres,  
+        blurred: form.photo_blurred
+    }],
+    icon: form.icon
     });
     artwork.save(function (err) {
         if (err) {

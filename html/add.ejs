@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <title>StreetArt: Add Artwork</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+</head>
+
+<body>
+    <form action="./add" method="POST" enctype="multipart/form-data" class="addArtwork" id="input_form" style="height:530px">
+        <h1>Add Artwork</h1>
+        <fieldset class="artwork">
+            <legend>Artwork Details</legend>
+            <p>
+                <label>Artwork Name</label>
+                <input type="text" name="name" />
+                <label>Website</label>
+                <input type="text" name="url" />
+            </p>
+            <p>
+                <label>Artwork Description</label>
+                <input type="text" name="description" />
+                <label>Artwork Status</label>
+                <select name="status_code">
+                    <option value="0">Artwork Is Available</option>
+                    <option value="1">Artwork Is Stolen</option>
+                    <option value="2">Artwork Is Destroyed</option>
+                </select>
+            </p>
+        </fieldset>
+        <fieldset class="location">
+            <legend>Artwork Location</legend>
+            <p>
+                <label>Location Address</label>
+                <input type="text" name="location_address" class="long" />
+            </p>
+            <p>
+                <label>Location Lat</label>
+                <input type="text" name="location_lat" class="short" />
+                <label>Location Lng</label>
+                <input type="text" name="location_lng" class="short" />
+            </p>
+        </fieldset>
+        <fieldset class="artist" id="artist_placeholder">
+            <legend>Artist Details
+                <button onclick="javascript:addArtist(0);" type="button">+</button>
+            </legend>
+            <p>
+                <label>Artist Name</label>
+                <input type="text" name="artist_name" />
+                <img id="artist_img0" style="width:100px;height:100px;border:0px" />
+            </p>
+            <p>
+                <label>Artist Photo</label>
+                <input type="file" id="artist_photo" name="artist_photo" accept="image/*" onchange="javascript:placeImage(0, this.files[0]);"/>
+            </p>
+        </fieldset>
+        <fieldset class="photo">
+            <legend>Photos</legend>
+            <p>
+                <label>Photo Title</label>
+                <input type="text" name="photo_title" placeholder="Photo Title" />
+                <label>Photo</label>
+                <input type="file" accept="image/*" name="photo_fullres" />
+            </p>
+        </fieldset>
+        <fieldset class="icon">
+            <legend>Do we really need that?</legend>
+            <p>
+                <label>Icon</label>
+                <input type="file" accept="image/*" name="icon" />
+                <label style="color:#FFFFFF">.</label>
+                <div>
+                    <button class="button" type="submit">Add Artwork</button>
+                </div>
+            </p>
+        </fieldset>
+    </form>
+    <script>
+        var count = 0;
+
+        function placeImage(i, file) {
+                var img = document.getElementById('artist_img'+i);
+
+                // Using FileReader to display the image content
+                var reader = new FileReader();
+                reader.onload = (function(aImg) {
+                    return function(e) {
+                        aImg.src = e.target.result;
+                    };
+                })(img);
+                reader.readAsDataURL(file);
+        }
+
+        function addArtist() {
+            count++;
+            var placeholder = document.getElementById('artist_placeholder');
+            var div = document.createElement("div");
+            div.innerHTML =
+                "    <p>" +
+                "        <label>Artist Name</label>" +
+                "        <input type='text' name='artist_name" + count + "' />" +
+                "        <img id='artist_img" + count + "' style='width:100px;height:100px;border:0px'/>" +
+                "    </p>" +
+                "    <p>" +
+                "        <label>Artist Photo</label>" +
+                "        <input type='file' id='artist_photo' name='artist_photo' accept='image/*' onchange='javascript:placeImage(count, this.files[0]);'/>" +
+                "    </p>";
+            placeholder.appendChild(div);
+            var form = document.getElementById('input_form');
+            var newHeight = (530 + count * div.clientHeight) + "px";
+            form.style.height = newHeight;
+        };
+    </script>
+</body>
+
+</html>

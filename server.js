@@ -1,18 +1,25 @@
 var express = require('express');
-var operations = require("./db/operations.js")
+var operations = require("./db/operations.js");
 var app = express();
 var router = express.Router();
+var multer  = require('multer')
+var upload = multer()
 
 app.set('views', "./html");
 app.set('view engine', 'ejs');
+
 router.get('/', function(req, res){
     operations.getArtworks(res);
 });
 router.get('/add', function(req, res) {
-    operations.addArtwork(req, res)
-})
+    res.render('add.ejs', {});
+});
+router.post('/add', upload.any(), function(req, res) {
+    operations.addArtwork(req, res);
+});
 
 app.use('/artworks', router);
+app.use(express.static('public'));
 
 app.use(function(req, res, next){
     res.status(404);
