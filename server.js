@@ -17,6 +17,9 @@ router.get('/add', function(req, res) {
 router.post('/add', upload.any(), function(req, res) {
     operations.addArtwork(req, res);
 });
+router.get('/image/:id', function(req, res) {
+   operations.getImage(req.params.id, res); 
+});
 
 app.use('/artworks', router);
 app.use(express.static('public'));

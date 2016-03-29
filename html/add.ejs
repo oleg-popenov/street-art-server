@@ -44,26 +44,14 @@
         </fieldset>
         <fieldset class="artist" id="artist_placeholder">
             <legend>Artist Details
-                <button onclick="javascript:addArtist(0);" type="button">+</button>
+                <button onclick="javascript:addArtist();" type="button">+</button>
             </legend>
-            <p>
-                <label>Artist Name</label>
-                <input type="text" name="artist_name" />
-                <img id="artist_img0" style="width:100px;height:100px;border:0px" />
-            </p>
-            <p>
-                <label>Artist Photo</label>
-                <input type="file" id="artist_photo" name="artist_photo" accept="image/*" onchange="javascript:placeImage(0, this.files[0]);"/>
-            </p>
         </fieldset>
-        <fieldset class="photo">
-            <legend>Photos</legend>
-            <p>
-                <label>Photo Title</label>
-                <input type="text" name="photo_title" placeholder="Photo Title" />
-                <label>Photo</label>
-                <input type="file" accept="image/*" name="photo_fullres" />
-            </p>
+        <fieldset class="photo" id="photo_placeholder">
+            <legend>Photos
+            <button onclick="javascript:addPhoto();" type="button">+</button>
+            </legend>
+
         </fieldset>
         <fieldset class="icon">
             <legend>Do we really need that?</legend>
@@ -78,10 +66,15 @@
         </fieldset>
     </form>
     <script>
-        var count = 0;
+        var artist_count = 0;
+        var photo_count = 0;
+        var form_height = 530;
 
-        function placeImage(i, file) {
-                var img = document.getElementById('artist_img'+i);
+        addArtist(0);
+        addPhoto(0);
+
+        function placeImage(id, file) {
+                var img = document.getElementById(id);
 
                 // Using FileReader to display the image content
                 var reader = new FileReader();
@@ -94,23 +87,58 @@
         }
 
         function addArtist() {
-            count++;
+            artist_count++;
             var placeholder = document.getElementById('artist_placeholder');
             var div = document.createElement("div");
-            div.innerHTML =
+            var html = parametrizedArtistInput(artist_count);
+            div.innerHTML = html;
+            placeholder.appendChild(div);
+            formHeightPlus(div.clientHeight);
+        };
+        
+        function addPhoto() {
+            photo_count++;
+            var placeholder = document.getElementById('photo_placeholder');
+            var div = document.createElement("div");
+            var html = parametrizedPhotoInput(photo_count);
+            div.innerHTML = html;
+            placeholder.appendChild(div);
+            formHeightPlus(div.clientHeight);
+        };
+        
+        function formHeightPlus(i){
+            form_height += i;
+            var form = document.getElementById('input_form');
+            form.style.height = form_height + "px";
+        };
+        
+        
+        function parametrizedArtistInput(i){
+            var html =   
                 "    <p>" +
                 "        <label>Artist Name</label>" +
-                "        <input type='text' name='artist_name" + count + "' />" +
-                "        <img id='artist_img" + count + "' style='width:100px;height:100px;border:0px'/>" +
+                "        <input type='text' name='artist_name" + i + "' />" +
+                "        <img id='artist_img" + i + "' style='width:100px;height:100px;border:0px'/>" +
                 "    </p>" +
                 "    <p>" +
                 "        <label>Artist Photo</label>" +
-                "        <input type='file' id='artist_photo' name='artist_photo' accept='image/*' onchange='javascript:placeImage(count, this.files[0]);'/>" +
+                "        <input type='file' id='artist_photo' name='artist_"+i+"' accept='image/*' onchange='javascript:placeImage('artist_img" + i + "', this.files[0]);'/>" +
                 "    </p>";
-            placeholder.appendChild(div);
-            var form = document.getElementById('input_form');
-            var newHeight = (530 + count * div.clientHeight) + "px";
-            form.style.height = newHeight;
+                return html;
+        };
+        
+        function parametrizedPhotoInput(i){
+            var html = 
+                "    <p>" +
+                "        <label>Photo Title</label>" +
+                "        <input type='text' name='photo_title" + i + "' />" +
+                "        <img id='photo_preview" + i + "' style='width:100px;height:100px;border:0px'/>" +
+                "    </p>" +
+                "    <p>" +
+                "        <label>Artist Photo</label>" +
+                "        <input type='file' id='photo_fullres' name='photo_"+i+"' accept='image/*' onchange='javascript:placeImage('photo_preview" + i + "', this.files[0]);'/>" +
+                "    </p>";
+                return html;
         };
     </script>
 </body>
