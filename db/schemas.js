@@ -1,6 +1,6 @@
 var mongoose    = require('mongoose');
 
-mongoose.connect('mongodb://' + process.env.IP + '/test');
+mongoose.connect(process.env.MONGOLAB_URI);
 var db = mongoose.connection;
 
 db.on('error', function (err) {
