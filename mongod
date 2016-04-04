@@ -1,1 +1,2 @@
+export MONGOLAB_URI=mongodb://$IP/test
 mongod --bind_ip=$IP --dbpath=data --nojournal --rest "$@"

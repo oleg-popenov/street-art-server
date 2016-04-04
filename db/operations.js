@@ -1,4 +1,5 @@
 var schemas = require("./schemas.js");
+var request = require('request');
 
 var Artwork = schemas.Artwork;
 var Photo = schemas.Photo;
@@ -9,7 +10,7 @@ var ObjectId = schemas.ObjectId;
 var getArtworks = function(res) {
     Artwork
         .find({})
-//        .populate('artists._id')
+        .populate('artists')
         .exec(function(error, result) {
             if (error) {
                 throw new Error(error);
@@ -86,11 +87,108 @@ var addArtwork = function(req, res) {
     });
 };
 
+function importData(json, callback) {
+    var downloadImage = function(url, callback){
+        var requestOptions = {
+            encoding: 'base64',
+            method: "GET",
+            uri: url
+        };
+        request(requestOptions, function(err, res, body) {
+            if(!err && res.statusCode == 200){
+                callback(null, body);
+            }else{
+                callback(err, null);
+            }
+        })
+    };
+    
+    var saveImage = function(err, image, callback){
+        if(!err && image){
+            var img = new Image({
+                image: image
+            });
+            img.save(function(err){
+                if(!err){
+                    callback(null, img._id);
+                }else{
+                    callback(err, null);
+                }
+            });
+        }else{
+            callback(err, null);
+        }
+    };
+    var saveArtist = function(name, photo_url, callback){
+             var artist = new Artist({
+                 name: name
+             });
+             artist.save(function(err) {
+                 if(!err){
+                     callback(null, artist);
+                 }else{
+                     callback(err, null);
+                 }
+             });
+    };
+    
+    var savePhoto = function(name, photo_url, callback){
+        if(photo_url){
+            downloadImage(photo_url, function(err, image){
+                saveImage(err, image, function(err, id){
+                    if(err){
+                        callback(err, null);
+                    }
+                    var photo = {
+                        name: name
+                    };
+                    if(id) photo.image = id;
+                    callback(null, photo);
+                }); 
+            });
+        }else{
+            var photo = { name: name };
+            callback(null, photo);
+        }
+    };
+    
+    json.forEach(function(art, index, array) {
+        saveArtist(art.artist, null, function(err, artist){
+            if(!err){
+                savePhoto(art.name, art.image, function(err, photo){
+                    if(!err){
+                        var artwork = new Artwork({
+                            url: art.site || "",
+                            name: art.name || "",
+                            description: art.description || "",
+                            deployDate: (art.year)? new Date(art.year, 1, 1) : Date.now(),
+                            location: {
+                                lat: art.location.lat || "0.0",
+                                lng: art.location.lng || "0.0",
+                                address: art.location.address || ""
+                                },
+                            status: {
+                                code: 0,
+                            },
+                            artists: [artist._id],
+                            photos: [photo],
+                        });
+                        artwork.save(function(err) {
+                            if (!err) console.log('Artwork ' + index + ' saved');
+                        });
+                    }
+                });
+            }
+        });
+    });
+    callback();
+};
+
 function getImage(objectId, res) {
     Image.findOne({
         _id: objectId
     }, function(err, image) {
-        if (err) {
+        if (err || !image) {
             res.status(404);
             res.send();
             return;
@@ -98,10 +196,11 @@ function getImage(objectId, res) {
         res.writeHead(200, {
             'Content-Type': 'image/jpeg'
         });
-        res.end(image.image);
+        res.end(new Buffer(image.image.toString(), 'base64'));
     });
 };
 
 module.exports.getImage = getImage;
 module.exports.getArtworks = getArtworks;
 module.exports.addArtwork = addArtwork;
+module.exports.importData = importData;
