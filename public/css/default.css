@@ -31,7 +31,7 @@ h1 {
     font-weight:200;
     color: #888888;
     font-size:16pt;
-    background: transparent url(../img/h1.png) no-repeat center left;
+    background: transparent;
     padding-left:33px;
     margin:7px 5px 8px 8px;
 }
@@ -81,7 +81,7 @@ form.addArtwork .infobox{
     width:380px;
     height:98px;
     font-size:9px;
-    background: #FDFEFA url(../img/bg_infobox.gif) repeat-x top left;
+    background: #FDFEFA;
 }
 form.addArtwork legend
 {
@@ -151,7 +151,7 @@ form.addArtwork input[type=password]
 }
 .button
 {
-    background: #abda0f url(../img/overlay.png) repeat-x;
+    background: #abda0f;
     padding: 8px 10px 8px;
     color: #fff;
     text-decoration: none;
