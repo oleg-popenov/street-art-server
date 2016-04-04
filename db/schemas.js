@@ -74,7 +74,7 @@ Artwork.options.toJSON = {
             if(!artist.image){
                 delete artist.image;
             }else{
-                artist.image = 'https://street-art-server-pos1985.c9users.io/artworks/image/' + artist.image;
+                artist.image = process.env.APP_URL + '/artworks/image/' + artist.image;
             }
         });
         
@@ -84,7 +84,7 @@ Artwork.options.toJSON = {
             if(!photo.image){
                 delete photo.image;
             }else{
-                photo.image = 'https://street-art-server-pos1985.c9users.io/artworks/image/' + photo.image;
+                photo.image = process.env.APP_URL + '/artworks/image/' + photo.image;
             }
             
         });
