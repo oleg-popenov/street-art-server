@@ -31,7 +31,7 @@ var Artwork = new Schema({                          //id	String	Unique identity 
     url: String,                                    //url	String	Public web URL to the artwork
     name: String,                                   //name	String	Title of the artwork
     description: String,                            //description	String	Artwork description
-    deployDate:	{ type: Date, default: Date.now },  //deployDate	String	Date when artwork was published/created
+    deployDate:	 Date,                              //deployDate	String	Date when artwork was published/created
     location:{ 	                                    //location	Object	Artwork location information
         lat: Number,                                //lat	Float	Geo latitude
         lng: Number,                                //lng	Float	Geo longitude
@@ -56,16 +56,23 @@ var Artwork = new Schema({                          //id	String	Unique identity 
             ref: 'Image'
         }
     }]
+},{
+    timestamps: true
 });
 
 Artwork.options.toJSON = {
     transform: function(doc, ret, options) {
         if(!ret.location.lat) delete ret.location.lat;
         if(!ret.location.lng) delete ret.location.lng;
+        if(!ret.deployDate) delete ret.deployDate;
         //status name
         if(ret.status.code == 0) ret.status.name = 'artwork is available';
         else if(ret.status.code == 1) ret.status.name = 'artwork is stolen';
         else if(ret.status.code == 2) ret.status.name = 'artwork is destroyed';
+        
+        if(ret.deployDate) ret.deployDate = ret.deployDate.valueOf();
+        if(ret.createdAt)  ret.createdAt  = ret.createdAt.valueOf();
+        if(ret.updatedAt)  ret.updatedAt  = ret.updatedAt.valueOf();
         
         ret.artists.forEach(function(artist, index, array){
             artist.id = artist._id;

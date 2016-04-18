@@ -190,6 +190,19 @@ form.addArtwork select.date
 {
     width: 40px;
 }
+
+.photo_test input {
+    width: 100px;
+    height: 100px;
+    opacity: 50%;
+}
+
+.photo_test img {
+    position: absolute;
+    
+    clip: rect(100px,100px,100px,100px);
+}
+
 input:focus, select:focus{
     background-color: #efffe0;
 }

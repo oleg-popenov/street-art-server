@@ -4,7 +4,28 @@
 <head>
     <title>StreetArt: Add Artwork</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <!--<link rel="stylesheet" type="text/css" href="../../css/default.css" /> -->
+    <style>
+        .photo_test{  
+            overflow: hidden;
+            width: 100px;
+            height: 100px;
+        }
+        .photo_test input {
+          position: relative;
+    top: -200px;
+    width: 100px;
+    height: 100px;
+    opacity: 0;
+    float: left;
+        }
+
+        .photo_test img {
+                position: relative;
+    top: -50px;
+    left: -100px;
+        }
+    </style>
 </head>
 
 <body>
@@ -51,7 +72,14 @@
             <legend>Photos
             <button onclick="javascript:addPhoto();" type="button">+</button>
             </legend>
-
+            <div class=photo_test>
+                <img src='/add.png'/>
+                <input type='file' name='photo_test' accept='image/*'/>
+            </div>
+            <div class=photo_test>
+                <img src='/add.png'/>
+                <input type='file' name='photo_test' accept='image/*'/>
+            </div>
         </fieldset>
         <fieldset class="icon">
             <legend>Do we really need that?</legend>

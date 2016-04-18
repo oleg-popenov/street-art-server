@@ -5,6 +5,7 @@ var app = express();
 var router = express.Router();
 var multer  = require('multer');
 var upload = multer();
+var schemas = require("./db/schemas.js");
 
 app.set('views', "./html");
 app.set('view engine', 'ejs');
@@ -29,7 +30,37 @@ router.get('/initData', function(req, res) {
    });
 });
 
+var uiRouter = express.Router();
+uiRouter.get('/add', function(req, res) {
+    res.render('add.ejs', {});
+});
+uiRouter.get('/', function(req, res) {
+    schemas.Artwork
+    .find({})
+    .populate('artists')
+    .exec(function(err, doc){
+        if(err){
+            res.status(500);
+            res.send("Server fault");
+        }
+        res.render('list.ejs', {doc:doc});
+    });
+});
+uiRouter.get('/:id', function(req, res) {
+    schemas.Artwork
+    .findOne({_id:req.params.id})
+    .populate('artists')
+    .exec(function(err, doc){
+        if(err){
+            res.status(500);
+            res.send("Server fault");
+        }
+        res.render('edit.ejs', {doc:doc});
+    });
+});
+
 app.use('/artworks', router);
+app.use('/web/artworks', uiRouter);
 app.use(express.static('public'));
 
 app.use(function(req, res, next){
@@ -45,5 +76,7 @@ app.use(function(err, req, res, next){
 });
 
 app.listen(process.env.PORT || 80, process.env.IP, function() {
+    console.log('MONGOLAB_URI='+ process.env.MONGOLAB_URI);
+    console.log('APP_URL=' + process.env.APP_URL);
     console.log('server is running');
 });

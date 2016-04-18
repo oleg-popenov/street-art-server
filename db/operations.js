@@ -161,7 +161,7 @@ function importData(json, callback) {
                             url: art.site || "",
                             name: art.name || "",
                             description: art.description || "",
-                            deployDate: (art.year)? new Date(art.year, 1, 1) : Date.now(),
+                            deployDate: (art.year),
                             location: {
                                 lat: art.location.lat || "0.0",
                                 lng: art.location.lng || "0.0",

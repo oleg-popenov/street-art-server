@@ -6,6 +6,8 @@ Opensource Node.js backend for StreetArtView project
 
 ```
 {
+	createdAt: long,
+	updatedAt: long,
 	url : "http://www.website.com",
 	name : "string",
 	description : "string",

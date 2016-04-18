@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+    <title>StreetArt: Artworks List</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="../../css/list.css" />
+</head>
+<body>
+<% doc.forEach(function(art, index, array) { %>
+<div class="img">
+    <a target="_blank" href='./<%=art.id%>'>
+    <% if(art.photos[0].image) {%>
+    <img src='<%= process.env.APP_URL +'/artworks/image/'+ art.photos[0].image%>' width="300" height="200"/>
+    <% } else {%>
+    <img src='../../no_image.png' width="300" height="200"/>
+    <% } %>
+    </a>
+    <div class="desc">"<%= art.name %>" , <%= art.deployDate.getFullYear() %>
+    "<%= art.artists[0].name %>"</div>
+    
+</div>
+<% });%>
+<div class="img">
+    <a target="_blank" href='./add'>
+    <img src='../../add.png' width="300" height="200"/>
+    </a>
+    <div class="desc">Add artwork</div>
+</div>
+</body>
+
+</html>
