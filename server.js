@@ -1,20 +1,15 @@
 var express = require('express');
 var operations = require("./db/operations.js");
-var data = require("./db/data.js");
+var data = require("./db/data1.js");
 var app = express();
 var router = express.Router();
+var webRouter = express.Router();
 var multer  = require('multer');
 var upload = multer();
 var schemas = require("./db/schemas.js");
 
-app.set('views', "./html");
-app.set('view engine', 'ejs');
-
 router.get('/', function(req, res){
     operations.getArtworks(res);
-});
-router.get('/add', function(req, res) {
-    res.render('add.ejs', {});
 });
 router.post('/add', upload.any(), function(req, res) {
     operations.addArtwork(req, res);
@@ -30,37 +25,15 @@ router.get('/initData', function(req, res) {
    });
 });
 
-var uiRouter = express.Router();
-uiRouter.get('/add', function(req, res) {
-    res.render('add.ejs', {});
+webRouter.get('/', function(req, res) {
+    res.sendFile(__dirname + '/web/artworks.html');
 });
-uiRouter.get('/', function(req, res) {
-    schemas.Artwork
-    .find({})
-    .populate('artists')
-    .exec(function(err, doc){
-        if(err){
-            res.status(500);
-            res.send("Server fault");
-        }
-        res.render('list.ejs', {doc:doc});
-    });
-});
-uiRouter.get('/:id', function(req, res) {
-    schemas.Artwork
-    .findOne({_id:req.params.id})
-    .populate('artists')
-    .exec(function(err, doc){
-        if(err){
-            res.status(500);
-            res.send("Server fault");
-        }
-        res.render('edit.ejs', {doc:doc});
-    });
+webRouter.get('/:id', function(req, res) {
+    res.sendFile(__dirname + '/web/details.html');
 });
 
 app.use('/artworks', router);
-app.use('/web/artworks', uiRouter);
+app.use('/web', webRouter);
 app.use(express.static('public'));
 
 app.use(function(req, res, next){

@@ -4,7 +4,6 @@
   "description": "Opensource Node.js backend for StreetArtView project",
   "main": "server.js",
   "dependencies": {
-    "ejs": "2.2.x",
     "express": "4.13.x",
     "mongoose": "4.4.x",
     "multer": "1.1.x",

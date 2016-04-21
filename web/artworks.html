@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html >
+    <head>
+        <title>StreetArt: Artworks List</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" type="text/css" href="../../css/list.css" />    
+    </head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<body>
+ 
+<div ng-app="myApp" ng-controller="customersCtrl">
+ 
+<div class="img" ng-repeat="art in artworks">
+    <a target="_blank" href='./{{art.id}}'>
+        <img ng-src="{{art.photos[0].image || '../../no_image.png'}}" width="300" height="200"/>
+    </a>
+    <div class="desc">{{art.name}} , {{art.deployDate}} {{art.artists[0].name}}</div>
+</div>
+
+ 
+<script>
+var app = angular.module('myApp', []);
+app.controller('customersCtrl', function($scope, $http) {
+   $http.get("../artworks/")
+   .then(function (response) {
+       $scope.artworks = response.data;
+    ;});
+});
+</script>
+ 
+</body>
+</html>

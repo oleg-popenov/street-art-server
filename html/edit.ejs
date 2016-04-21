@@ -7,6 +7,10 @@
 </head>
 <body>
 Hello! <%= doc.name%>
+<form action='#' method='post' enctype='multipart/form-data'>
+  <input name='uploads[]' type=file multiple>
+  <input type='submit'>
+</form>
 </body>
 
 </html>
