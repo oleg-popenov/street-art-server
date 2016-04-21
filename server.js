@@ -17,13 +17,13 @@ router.post('/add', upload.any(), function(req, res) {
 router.get('/image/:id', function(req, res) {
    operations.getImage(req.params.id, res); 
 });
-router.get('/initData', function(req, res) {
+/*router.get('/initData', function(req, res) {
     operations.importData(data.json, function(){
         res.status(200);    
         res.write('<h1>Done</h1>');
         res.send();
    });
-});
+});*/
 
 webRouter.get('/', function(req, res) {
     res.sendFile(__dirname + '/web/artworks.html');
