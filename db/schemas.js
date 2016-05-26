@@ -19,7 +19,8 @@ var Schema = mongoose.Schema;
  **/
  
 var Image = new Schema({
-    image: Buffer
+    image: Buffer,
+    thumb: Buffer
 }); 
  
 var Artist = new Schema({   //id	String	Unique identity of the object
@@ -91,7 +92,9 @@ Artwork.options.toJSON = {
             if(!photo.image){
                 delete photo.image;
             }else{
-                photo.image = process.env.APP_URL + '/artworks/image/' + photo.image;
+                var objId = photo.image;
+                photo.image = process.env.APP_URL + '/artworks/image/' + objId;
+                photo.thumb = process.env.APP_URL + '/artworks/thumb/' + objId;
             }
             
         });

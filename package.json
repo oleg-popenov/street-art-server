@@ -5,6 +5,7 @@
   "main": "server.js",
   "dependencies": {
     "express": "4.13.x",
+    "lwip": "0.0.8",
     "mongoose": "4.4.x",
     "multer": "1.1.x",
     "request": "2.69.0"

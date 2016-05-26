@@ -1,32 +1,37 @@
 <!DOCTYPE html>
-<html >
-    <head>
-        <title>StreetArt: Artworks List</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../../css/list.css" />    
-    </head>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-<body>
- 
-<div ng-app="myApp" ng-controller="customersCtrl">
- 
-<div class="img" ng-repeat="art in artworks">
-    <a target="_blank" href='./{{art.id}}'>
-        <img ng-src="{{art.photos[0].image || '../../no_image.png'}}" width="300" height="200"/>
-    </a>
-    <div class="desc">{{art.name}} , {{art.deployDate}} {{art.artists[0].name}}</div>
-</div>
+<html>
 
- 
-<script>
-var app = angular.module('myApp', []);
-app.controller('customersCtrl', function($scope, $http) {
-   $http.get("../artworks/")
-   .then(function (response) {
-       $scope.artworks = response.data;
-    ;});
-});
-</script>
- 
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Angular Material style sheet -->
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+  <title>StreetArt: Artworks List</title>
+</head>
+
+<body ng-app="myApp">
+  <div ng-controller='ListController as list' flex ng-cloak>
+    <md-grid-list md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6" md-row-height="1:1" md-gutter='5px'>
+      <md-grid-tile ng-repeat='art in artworks' style="background: url({{art.photos[0].thumb || '/no_image.png'}}); background-size: 100%;" ng-click='list.openDetails(art)'>
+        <md-grid-tile-footer layout-align="center center">
+          <h2>{{art.name}}</h2>
+        </md-grid-tile-footer>
+      </md-grid-tile>
+    </md-grid-list>
+
+    <!-- Angular Material requires Angular.js Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+    <script type="text/javascript" src="/artworks.js"></script>
+
+    <!-- Angular Material Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
 </body>
+
 </html>

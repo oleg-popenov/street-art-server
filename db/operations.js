@@ -1,5 +1,7 @@
 var schemas = require("./schemas.js");
 var request = require('request');
+var lwip    = require('lwip');
+var fs      = require('fs');
 
 var Artwork = schemas.Artwork;
 var Photo = schemas.Photo;
@@ -199,8 +201,58 @@ function getImage(objectId, res) {
         res.end(new Buffer(image.image.toString(), 'base64'));
     });
 };
+function getThumb(objectId, res) {
+    Image.findOne({
+        _id: objectId
+    }, function(err, image) {
+        if (err || !image) {
+            res.status(404);
+            res.send();
+            return;
+        }
+        
+        if(!image.thumb){
+            
+            var fullSizeName = './tmp/' + objectId + '.jpg';
+            var thumbName    = './tmp/' + objectId + '_thumb.jpg';
+            fs.writeFile(fullSizeName, image.image.toString(), 'base64', function(err){
+                if(err){res.send({error:err}); return;}
+               
+                lwip.open(fullSizeName, function(err, origImage){
+                    if(err){res.send({error:err}); return;}
+                    var cropSize = Math.min(origImage.height(), origImage.width());
+                    origImage.batch()
+                        .crop(cropSize, cropSize)
+                        .resize(200, 200)
+                        .writeFile(thumbName, function(err){
+                            if(err){res.send({error:err}); return;}
+                            fs.readFile(thumbName, 'base64', function(err, data){
+                                if(err){res.send({error:err}); return;}
+                                image.thumb = data;
+                                image.save((err) => {
+                                    if(err){res.send({error:err}); return;}
+                                                res.writeHead(200, {
+                                                'Content-Type': 'image/jpeg'
+                                                });
+                                    res.end(new Buffer(image.thumb.toString(), 'base64')); 
+                                    fs.unlink(fullSizeName);
+                                    fs.unlink(thumbName);
+                                });
+                            });
+                        });
+                });
+            }); 
+        }else{
+            res.writeHead(200, {
+                'Content-Type': 'image/jpeg'
+            });
+            res.end(new Buffer(image.thumb.toString(), 'base64'));    
+        }
+    });
+};
 
 module.exports.getImage = getImage;
+module.exports.getThumb = getThumb;
 module.exports.getArtworks = getArtworks;
 module.exports.addArtwork = addArtwork;
 module.exports.importData = importData;

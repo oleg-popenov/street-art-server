@@ -3,38 +3,62 @@ var operations = require("./db/operations.js");
 var data = require("./db/data1.js");
 var app = express();
 var router = express.Router();
-var webRouter = express.Router();
 var multer  = require('multer');
 var upload = multer();
 var schemas = require("./db/schemas.js");
 
+// ****ARTWORKS
+// List of artworks
 router.get('/', function(req, res){
     operations.getArtworks(res);
 });
-router.post('/add', upload.any(), function(req, res) {
-    operations.addArtwork(req, res);
+// Add new Artwork
+router.post('/', function(req, res){
+    throw new Error('Not implemented yet');
 });
+// Delete Artwork
+router.delete('/:id', function(req, res){
+    throw new Error('Not implemented yet');
+});
+
+// ****IMAGES
+// Get image
 router.get('/image/:id', function(req, res) {
    operations.getImage(req.params.id, res); 
 });
-/*router.get('/initData', function(req, res) {
-    operations.importData(data.json, function(){
-        res.status(200);    
-        res.write('<h1>Done</h1>');
-        res.send();
-   });
-});*/
+// Upload new image
+router.post('/image', function(req, res){
+    throw new Error('Not implemented yet');
+});
+// Utility route to download thumbnail
+router.get('/thumb/:id', function(req, res) {
+   operations.getThumb(req.params.id, res); 
+});
+// Delete Image
+router.delete('/image/:id', function(req, res) {
+    throw new Error('Not implemented yet');
+});
 
-webRouter.get('/', function(req, res) {
+// ****ARTISTS
+// List of artists
+router.get('/artists', function(req, res) {
+    throw new Error('Not implemented yet');
+});
+// Add new artist
+router.post('/artists', function(req, res) {
+    throw new Error('Not implemented yet');
+});
+// Delete artist
+router.delete('/artists/:id', function(req, res) {
+    throw new Error('Not implemented yet');
+});
+
+
+app.use(express.static('public'));
+app.use('/artworks', router);
+app.all('/', function(req, res){
     res.sendFile(__dirname + '/web/artworks.html');
 });
-webRouter.get('/:id', function(req, res) {
-    res.sendFile(__dirname + '/web/details.html');
-});
-
-app.use('/artworks', router);
-app.use('/web', webRouter);
-app.use(express.static('public'));
 
 app.use(function(req, res, next){
     res.status(404);

@@ -1,0 +1,64 @@
+<md-toolbar>
+    <div class="md-toolbar-tools">
+        <h2>{{details.artwork.name}}, {{details.artwork.deployDate}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="details.cancel()">
+            <i class="material-icons">clear</i>
+    </div>
+</md-toolbar>
+<md-content layout-padding>
+    <div>
+        <img ng-src="{{details.artwork.photos[0].thumb || '/no_image.png'}}" flex>
+        <md-button type="file">
+            Select a file
+            <input type="file" accept="image/jpeg" onchange="details.uploadImage(this.files[0])">
+        </md-button>
+        <form>
+            <div layout-gt-xs="row">
+                <md-input-container class="md-block md-icon-float" flex>
+                    <label>Name</label>
+                    <md-icon class="material-icons" ng-style="{color: 'rgb(63,81,181)'}">photo</md-icon>
+                    <input ng-model='details.artwork.name'>
+                </md-input-container>
+
+                <md-input-container class="md-block md-icon-float">
+                    <label>Year</label>
+                    <md-icon class="material-icons" ng-style="{color: 'rgb(63,81,181)'}">today</md-icon>
+                    <input type='number' ng-model='details.artwork.deployDate' min='1970' max='2020' />
+                </md-input-container>
+            </div>
+            <div layout-gt-xs="row">
+                <md-input-container class="md-block md-icon-float" flex>
+                    <label>Artist</label>
+                    <md-icon class="material-icons" ng-style="{color: 'rgb(63,81,181)'}">person</md-icon>
+                    <input type='text' ng-model='details.artwork.artists[0].name' />
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>Status</label>
+                    <md-select ng-model="details.artwork.status.code">
+                        <md-option ng-value="status.id" ng-repeat="status in details.statuses">{{ status.name }}</md-option>
+                        </select>
+                </md-input-container>
+            </div>
+            <div layout-gt-xs="row">
+                <md-input-container class="md-block md-icon-float" flex>
+                    <label>Website</label>
+                    <md-icon class="material-icons" ng-style="{color: 'rgb(63,81,181)'}">public</md-icon>
+                    <input type="url" ng-model='details.artwork.url' />
+                </md-input-container>
+            </div>
+            <div layout-gt-xs="row">
+                <md-input-container class="md-block md-icon-float" flex>
+                    <label>Description</label>
+                    <md-icon class="material-icons" ng-style="{color: 'rgb(63,81,181)'}">description</md-icon>
+                    <textarea ng-model='details.artwork.description' md-maxlength="150" rows="5" md-select-on-focus></textarea>
+                </md-input-container>
+            </div>
+            <map id='map' center="[{{details.artwork.location.lat}}, {{details.artwork.location.lng}}]" zoom-control="true" zoom="15"> </map>
+            <section layout="row" layout-sm="column" layout-align="end center" layout-wrap>
+                <md-button class="md-raised md-primary">Submit</md-button>
+                <md-button class="md-raised" ng-click='details.cancel()'>Cancel</md-button>
+            </section>
+        </form>
+    </div>
+</md-content>
