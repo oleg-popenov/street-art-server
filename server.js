@@ -18,7 +18,7 @@ router.post('/', function(req, res){
 });
 // Delete Artwork
 router.delete('/:id', function(req, res){
-    throw new Error('Not implemented yet');
+    operations.deleteArtwork(req.params.id, res);
 });
 
 // ****IMAGES

@@ -4,9 +4,13 @@
     // Controllers
     //---------------
     app.controller('ListController', ['$scope', '$http', '$mdDialog', '$mdMedia', function($scope, $http, $mdDialog, $mdMedia) {
-        $http.get("/artworks/").then(function(response) {
-            $scope.artworks = response.data.slice(100, 150);
-        });
+        $scope.reloadData = function() {
+            $http.get("/artworks/").then(function(response) {
+                $scope.artworks = response.data.slice(100, 150);
+            });
+        };
+        
+        $scope.reloadData();
 
         // this.openDetails = (artwork) => {
         //     this.modalInstance = $uibModal.open({
@@ -35,15 +39,17 @@
                 })
                 .then(function(answer) {
                     $scope.status = 'You said the information was "' + answer + '".';
+                    $scope.reloadData();
                 }, function() {
                     $scope.status = 'You cancelled the dialog.';
+                    $scope.reloadData();
                 });
         };
 
     }]);
 
     // modal   
-    app.controller('DetailController', ['art', '$mdDialog', function(art, $mdDialog) {
+    app.controller('DetailController', ['art', '$mdDialog', '$scope', '$http', function(art, $mdDialog, $scope, $http) {
         this.artwork = art;
         this.isRendered = false;
         this.statuses = [{
@@ -59,9 +65,17 @@
         this.cancel = function() {
             $mdDialog.cancel();
         };
-        
-        this.uploadImage = function(file){
-            if(!file) return;
+
+        this.delete = function() {
+            $http.delete("/artworks/" + this.artwork.id)
+            .then(function(response) {});
+            $mdDialog.hide('update');
+        }
+
+        $scope.uploadImage = function(file) {
+
+            if (!file) return;
+            alert(file);
             var reader = new FileReader();
         };
 

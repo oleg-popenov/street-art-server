@@ -11,7 +11,7 @@
         <img ng-src="{{details.artwork.photos[0].thumb || '/no_image.png'}}" flex>
         <md-button type="file">
             Select a file
-            <input type="file" accept="image/jpeg" onchange="details.uploadImage(this.files[0])">
+            <input type="file" accept="image/jpeg" onchange="uploadImage(this.files[0].name);">
         </md-button>
         <form>
             <div layout-gt-xs="row">
@@ -58,6 +58,7 @@
             <section layout="row" layout-sm="column" layout-align="end center" layout-wrap>
                 <md-button class="md-raised md-primary">Submit</md-button>
                 <md-button class="md-raised" ng-click='details.cancel()'>Cancel</md-button>
+                <md-button class="md-raised md-warn" ng-click='details.delete()'>Delete</md-button>
             </section>
         </form>
     </div>
